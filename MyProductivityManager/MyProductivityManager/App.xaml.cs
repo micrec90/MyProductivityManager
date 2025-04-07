@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using MyProductivityManager.Core.Context;
 using MyProductivityManager.Core.Interfaces;
+using MyProductivityManager.Core.Repositories;
 using MyProductivityManager.Core.Services;
 using MyProductivityManager.Core.ViewModels;
+using System.Configuration;
 using System.Windows;
 
 namespace MyProductivityManager
@@ -27,6 +31,13 @@ namespace MyProductivityManager
             services.AddSingleton<INavigationService, NavigationService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(servicesProvider => viewModelType => (ViewModel)servicesProvider.GetRequiredService(viewModelType));
+            string s = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            services.AddDbContext<ApplicationDBContext>(options =>
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                options.UseSqlServer(connectionString);
+            });
+            services.AddScoped<IFinancialTransactionRepository, FinancialTransactionRepository>();
 
             _servicesProvider = services.BuildServiceProvider();
         }
