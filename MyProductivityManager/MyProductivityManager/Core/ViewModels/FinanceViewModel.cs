@@ -1,5 +1,8 @@
-﻿using MyProductivityManager.Core.Models;
+﻿using MyProductivityManager.Core.Context;
+using MyProductivityManager.Core.Interfaces;
+using MyProductivityManager.Core.Models;
 using MyProductivityManager.Core.Models.Finance;
+using MyProductivityManager.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -77,12 +80,25 @@ namespace MyProductivityManager.Core.ViewModels
         public RelayCommand EditTransactionCommand { get; set; }
         public RelayCommand DeleteTransactionCommand { get; set; }
 
-        public FinanceViewModel()
+        private readonly IFinancialTransactionRepository _financialTransactionRepository;
+        private readonly ApplicationDBContext _context;
+        public FinanceViewModel(ApplicationDBContext context, IFinancialTransactionRepository financialTransactionRepository)
         {
+            _context = context;
+            _financialTransactionRepository = financialTransactionRepository;
+
             AddTransactionCommand = new RelayCommand(obj => AddTransaction(), obj => !string.IsNullOrEmpty(Description));
             DeleteTransactionCommand = new RelayCommand(obj => DeleteTransaction(), obj => SelectedItem != null);
             TransactionTypes = new ObservableCollection<TransactionType>(Enum.GetValues(typeof(TransactionType)).Cast<TransactionType>());
             Months = new ObservableCollection<MonthEnum>(Enum.GetValues(typeof(MonthEnum)).Cast<MonthEnum>());
+
+            LoadInitialData();
+        }
+        private async void LoadInitialData()
+        {
+            var data = await _financialTransactionRepository.GetAll();
+            AllTransactions = new ObservableCollection<FinancialTransaction>(data);
+            FilterData();
         }
 
         private void FilterData()
@@ -109,7 +125,7 @@ namespace MyProductivityManager.Core.ViewModels
             OnPropertyChanged(nameof(TotalExpenses));
             OnPropertyChanged(nameof(Total));
         }
-        private void AddTransaction()
+        private async Task AddTransaction()
         {
             FinancialTransaction transaction = new FinancialTransaction()
             {
@@ -117,7 +133,8 @@ namespace MyProductivityManager.Core.ViewModels
                 Amount = Amount,
                 Type = Amount >= 0 ? TransactionType.Income : TransactionType.Expense
             };
-            AllTransactions.Add(transaction);
+            var result = await _financialTransactionRepository.Add(transaction);
+            AllTransactions.Add(result);
             FilterData();
         }
         private void EditTransaction()
@@ -126,6 +143,8 @@ namespace MyProductivityManager.Core.ViewModels
         }
         private void DeleteTransaction()
         {
+            int id = SelectedItem.Id;
+            _financialTransactionRepository.Delete(id);
             AllTransactions.Remove(SelectedItem);
             FilterData();
         }

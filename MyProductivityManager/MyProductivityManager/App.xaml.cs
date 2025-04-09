@@ -31,7 +31,6 @@ namespace MyProductivityManager
             services.AddSingleton<INavigationService, NavigationService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(servicesProvider => viewModelType => (ViewModel)servicesProvider.GetRequiredService(viewModelType));
-            string s = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             services.AddDbContext<ApplicationDBContext>(options =>
             {
                 string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;

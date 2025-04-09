@@ -61,10 +61,16 @@ namespace MyProductivityManager.Core.Repositories
         {
             return await _context.FinancialTransactions.AnyAsync(e => e.Id == id);
         }
-
+        public async Task<List<FinancialTransaction>> GetAll()
+        {
+            return await _context.FinancialTransactions.ToListAsync();
+        }
         public async Task<List<FinancialTransaction>> GetAll(FinancialTransactionQueryObject financialTransactionQueryObject)
         {
             var financialTransactions = _context.FinancialTransactions.AsQueryable();
+
+            if (financialTransactionQueryObject == null)
+                return await financialTransactions.ToListAsync();
             if (!string.IsNullOrWhiteSpace(financialTransactionQueryObject.Description))
             {
                 financialTransactions = financialTransactions.Where(u => u.Description.Contains(financialTransactionQueryObject.Description));
