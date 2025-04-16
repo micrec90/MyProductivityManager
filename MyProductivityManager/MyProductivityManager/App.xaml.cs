@@ -28,7 +28,11 @@ namespace MyProductivityManager
             services.AddSingleton<HomeViewModel>();
             services.AddSingleton<FinanceViewModel>();
             services.AddSingleton<TasksViewModel>();
+
+            services.AddTransient<ProjectDialogViewModel>();
+
             services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IDialogService, DialogService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(servicesProvider => viewModelType => (ViewModel)servicesProvider.GetRequiredService(viewModelType));
             services.AddDbContext<ApplicationDBContext>(options =>
@@ -37,6 +41,7 @@ namespace MyProductivityManager
                 options.UseSqlServer(connectionString);
             });
             services.AddScoped<IFinancialTransactionRepository, FinancialTransactionRepository>();
+            services.AddScoped<IProjectsTasksRepository, ProjectsTasksRepository>();
 
             _servicesProvider = services.BuildServiceProvider();
         }

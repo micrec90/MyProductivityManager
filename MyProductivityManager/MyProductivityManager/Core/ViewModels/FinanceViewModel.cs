@@ -87,8 +87,8 @@ namespace MyProductivityManager.Core.ViewModels
             _context = context;
             _financialTransactionRepository = financialTransactionRepository;
 
-            AddTransactionCommand = new RelayCommand(obj => AddTransaction(), obj => !string.IsNullOrEmpty(Description));
-            DeleteTransactionCommand = new RelayCommand(obj => DeleteTransaction(), obj => SelectedItem != null);
+            AddTransactionCommand = new RelayCommand(async obj => await AddTransaction(), obj => !string.IsNullOrEmpty(Description));
+            DeleteTransactionCommand = new RelayCommand(async obj => await DeleteTransaction(), obj => SelectedItem != null);
             TransactionTypes = new ObservableCollection<TransactionType>(Enum.GetValues(typeof(TransactionType)).Cast<TransactionType>());
             Months = new ObservableCollection<MonthEnum>(Enum.GetValues(typeof(MonthEnum)).Cast<MonthEnum>());
 
@@ -141,10 +141,10 @@ namespace MyProductivityManager.Core.ViewModels
         {
 
         }
-        private void DeleteTransaction()
+        private async Task DeleteTransaction()
         {
             int id = SelectedItem.Id;
-            _financialTransactionRepository.Delete(id);
+            await _financialTransactionRepository.Delete(id);
             AllTransactions.Remove(SelectedItem);
             FilterData();
         }

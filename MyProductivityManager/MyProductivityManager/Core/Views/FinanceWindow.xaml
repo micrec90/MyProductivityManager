@@ -34,7 +34,7 @@
             </StackPanel>
         </Grid>
         
-        <DataGrid  Grid.Row="1" ItemsSource="{Binding FilteredTransactions}" SelectedItem="{Binding SelectedItem}" AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False" IsReadOnly="True">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding FilteredTransactions}" SelectedItem="{Binding SelectedItem}" AutoGenerateColumns="False" HeadersVisibility="Column" CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d, ConverterCulture=en-GB}" Width="100"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="*"/>
