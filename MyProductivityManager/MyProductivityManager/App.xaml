@@ -14,9 +14,15 @@
         <DataTemplate DataType="{x:Type TypeName=viewModel:TasksViewModel}">
             <view:TasksWindow/>
         </DataTemplate>
-
         <DataTemplate DataType="{x:Type TypeName=viewModel:ProjectDialogViewModel}">
             <view:ProjectDialogWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:TaskDialogViewModel}">
+            <view:TaskDialogWindow/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type TypeName=viewModel:YesNoDialogViewModel}">
+            <view:YesNoDialogWindow/>
         </DataTemplate>
     </Application.Resources>
 </Application>

@@ -30,6 +30,9 @@ namespace MyProductivityManager
             services.AddSingleton<TasksViewModel>();
 
             services.AddTransient<ProjectDialogViewModel>();
+            services.AddTransient<TaskDialogViewModel>();
+
+            services.AddTransient<YesNoDialogViewModel>();
 
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IDialogService, DialogService>();

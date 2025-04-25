@@ -18,10 +18,10 @@ namespace MyProductivityManager.Core.ViewModels
         private readonly IServiceProvider _servicesProvider;
         private readonly IProjectsTasksRepository _projectsTasksRepository;
         private readonly IDialogService _dialogService;
-        public ObservableCollection<Models.ProjectTasks.TaskStatus> StatusValues { get; set; }
+        public ObservableCollection<ProjectTaskStatus> StatusValues { get; set; }
 
         public ObservableCollection<Project> Projects { get; set; } = new ObservableCollection<Project>();
-        private Project _selectedProject;
+        private Project _selectedProject = null!;
         public Project SelectedProject
         {
             get { return _selectedProject; }
@@ -32,13 +32,14 @@ namespace MyProductivityManager.Core.ViewModels
                 RefreshTasks();
             }
         }
-
-        public IEnumerable<ProjectTask> TasksToDo => SelectedProject?.Tasks.Where(x => x.Status == Models.ProjectTasks.TaskStatus.ToDo) ?? Enumerable.Empty<ProjectTask>();
-        public IEnumerable<ProjectTask> TasksInProgress => SelectedProject?.Tasks.Where(x => x.Status == Models.ProjectTasks.TaskStatus.InProgress) ?? Enumerable.Empty<ProjectTask>();
-        public IEnumerable<ProjectTask> TasksDone => SelectedProject?.Tasks.Where(x => x.Status == Models.ProjectTasks.TaskStatus.Done) ?? Enumerable.Empty<ProjectTask>();
+        public IEnumerable<ProjectTask> TasksToDo => SelectedProject?.Tasks.Where(x => x.Status == Models.ProjectTasks.ProjectTaskStatus.ToDo) ?? Enumerable.Empty<ProjectTask>();
+        public IEnumerable<ProjectTask> TasksInProgress => SelectedProject?.Tasks.Where(x => x.Status == Models.ProjectTasks.ProjectTaskStatus.InProgress) ?? Enumerable.Empty<ProjectTask>();
+        public IEnumerable<ProjectTask> TasksDone => SelectedProject?.Tasks.Where(x => x.Status == Models.ProjectTasks.ProjectTaskStatus.Done) ?? Enumerable.Empty<ProjectTask>();
 
         public RelayCommand AddProjectCommand { get; set; }
         public RelayCommand EditProjectCommand { get; set; }
+        public RelayCommand DeleteProjectCommand { get; set; }
+        public RelayCommand AddTaskCommand { get; set; }
         public RelayCommand MoveLeftCommand { get; set; }
         public RelayCommand MoveRightCommand { get; set; }
 
@@ -48,14 +49,17 @@ namespace MyProductivityManager.Core.ViewModels
             _servicesProvider = servicesProvider;
             _dialogService = dialogService;
             _dialogService.RegisterDialog<ProjectDialogViewModel, ProjectDialogWindow>();
+            _dialogService.RegisterDialog<TaskDialogViewModel, TaskDialogWindow>();
+            _dialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow>();
             _projectsTasksRepository = projectsTasksRepository;
-
             AddProjectCommand = new RelayCommand(obj => CreateNewProject(), obj => true);
             EditProjectCommand = new RelayCommand(obj =>  EditProject(), obj => SelectedProject != null);
+            DeleteProjectCommand = new RelayCommand(obj => DeleteProject(obj), obj => SelectedProject != null || obj != null);
+            AddTaskCommand = new RelayCommand(obj => AddTask(), obj => SelectedProject != null);
             MoveLeftCommand = new RelayCommand(obj => MoveLeft(obj));
             MoveRightCommand = new RelayCommand(obj => MoveRight(obj));
 
-            StatusValues = new ObservableCollection<Models.ProjectTasks.TaskStatus>(Enum.GetValues(typeof(Models.ProjectTasks.TaskStatus)).Cast<Models.ProjectTasks.TaskStatus>());
+            StatusValues = new ObservableCollection<ProjectTaskStatus>(Enum.GetValues(typeof(Models.ProjectTasks.ProjectTaskStatus)).Cast<ProjectTaskStatus>());
         }
         private void CreateNewProject()
         {
@@ -65,7 +69,23 @@ namespace MyProductivityManager.Core.ViewModels
         {
             OpenProjectDialogWindow(SelectedProject);
         }
-        private void OpenProjectDialogWindow(Project project = null)
+        private void DeleteProject(object param = null!)
+        {
+            var vm = _servicesProvider.GetRequiredService<YesNoDialogViewModel>();
+            var result = _dialogService.ShowDialog<YesNoDialogViewModel>(vm);
+            if (result == true)
+            {
+                if (param == null)
+                    Projects.Remove(SelectedProject);
+                else
+                    Projects.Remove((Project)param);
+            }
+        }
+        private void AddTask()
+        {
+            OpenTaskDialogWindow();
+        }
+        private void OpenProjectDialogWindow(Project project = null!)
         {
             var vm = _servicesProvider.GetRequiredService<ProjectDialogViewModel>();
             vm.InitializeProject(project);
@@ -83,14 +103,30 @@ namespace MyProductivityManager.Core.ViewModels
                 project.Description = vm.Description;
             }
         }
+        private void OpenTaskDialogWindow()
+        {
+            var vm = _servicesProvider.GetRequiredService<TaskDialogViewModel>();
+            var result = _dialogService.ShowDialog<TaskDialogViewModel>(vm);
+            if (result == true)
+            {
+                SelectedProject.Tasks.Add(new ProjectTask
+                {
+                    Title = vm.TaskName,
+                    Description = vm.Description,
+                    Status = vm.TaskStatus,
+                    Priority = vm.TaskPriority
+                });
+                RefreshTasks();
+            }
+        }
         private void MoveLeft(object param)
         {
-            (param as ProjectTask).Status--;
+            ((ProjectTask) param).Status--;
             RefreshTasks();
         }
         private void MoveRight(object param)
         {
-            (param as ProjectTask).Status++;
+            ((ProjectTask) param).Status++;
             RefreshTasks();
         }
         private void RefreshTasks()

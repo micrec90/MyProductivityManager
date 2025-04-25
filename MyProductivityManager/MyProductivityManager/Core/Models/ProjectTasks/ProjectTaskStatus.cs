@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyProductivityManager.Core.Models.ProjectTasks
 {
-    public enum TaskStatus
+    public enum ProjectTaskStatus
     {
         ToDo,
         InProgress,

@@ -14,7 +14,7 @@ namespace MyProductivityManager.Core.Models.ProjectTasks
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = String.Empty;
         public DateTime DueDate { get; set; }
-        public TaskStatus Status { get; set; }
+        public ProjectTaskStatus Status { get; set; }
         public TaskPriority Priority { get; set; }
         public int? ProjectId { get; set; }
         public Project? Project { get; set; }

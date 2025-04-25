@@ -37,7 +37,7 @@ namespace MyProductivityManager.Core.Services
             dialog.DataContext = viewModel;
             dialog.Owner = Application.Current.MainWindow;
 
-            EventHandler closeEventHandler = null;
+            EventHandler closeEventHandler = null!;
             closeEventHandler = (s, e) =>
             {
                 //callback(dialog.DialogResult.ToString());

@@ -1,5 +1,4 @@
-﻿using MyProductivityManager.Core.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,11 +15,11 @@ using System.Windows.Shapes;
 namespace MyProductivityManager.Core.Views
 {
     /// <summary>
-    /// Interaction logic for ProjectDialogWindow.xaml
+    /// Interaction logic for TaskDialogWindow.xaml
     /// </summary>
-    public partial class ProjectDialogWindow : Window
+    public partial class TaskDialogWindow : Window
     {
-        public ProjectDialogWindow()
+        public TaskDialogWindow()
         {
             InitializeComponent();
         }
