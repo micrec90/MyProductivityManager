@@ -10,7 +10,6 @@ namespace MyProductivityManager.Core.Models.Finance
 {
     public class FinancialTransaction
     {
-        [Key]
         public int Id { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
         public TransactionType Type { get; set; }

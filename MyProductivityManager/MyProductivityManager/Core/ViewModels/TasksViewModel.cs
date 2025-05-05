@@ -16,6 +16,7 @@ namespace MyProductivityManager.Core.ViewModels
     {
         private readonly ApplicationDBContext _context;
         private readonly IServiceProvider _servicesProvider;
+        private readonly IProjectsRepository _projectsRepository;
         private readonly IProjectsTasksRepository _projectsTasksRepository;
         private readonly IDialogService _dialogService;
         public ObservableCollection<ProjectTaskStatus> StatusValues { get; set; }
@@ -43,7 +44,7 @@ namespace MyProductivityManager.Core.ViewModels
         public RelayCommand MoveLeftCommand { get; set; }
         public RelayCommand MoveRightCommand { get; set; }
 
-        public TasksViewModel(ApplicationDBContext context, IServiceProvider servicesProvider, IProjectsTasksRepository projectsTasksRepository, IDialogService dialogService)
+        public TasksViewModel(ApplicationDBContext context, IServiceProvider servicesProvider, IProjectsRepository projectsRepository, IProjectsTasksRepository projectsTasksRepository, IDialogService dialogService)
         {
             _context = context;
             _servicesProvider = servicesProvider;
@@ -51,6 +52,7 @@ namespace MyProductivityManager.Core.ViewModels
             _dialogService.RegisterDialog<ProjectDialogViewModel, ProjectDialogWindow>();
             _dialogService.RegisterDialog<TaskDialogViewModel, TaskDialogWindow>();
             _dialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow>();
+            _projectsRepository = projectsRepository;
             _projectsTasksRepository = projectsTasksRepository;
             AddProjectCommand = new RelayCommand(obj => CreateNewProject(), obj => true);
             EditProjectCommand = new RelayCommand(obj =>  EditProject(), obj => SelectedProject != null);
@@ -60,6 +62,14 @@ namespace MyProductivityManager.Core.ViewModels
             MoveRightCommand = new RelayCommand(obj => MoveRight(obj));
 
             StatusValues = new ObservableCollection<ProjectTaskStatus>(Enum.GetValues(typeof(Models.ProjectTasks.ProjectTaskStatus)).Cast<ProjectTaskStatus>());
+
+            LoadInitialData();
+        }
+        private  async void LoadInitialData()
+        {
+            var data = await _projectsRepository.GetAll();
+            Projects = new ObservableCollection<Project>(data);
+            OnPropertyChanged(nameof(Projects));
         }
         private void CreateNewProject()
         {
@@ -76,16 +86,22 @@ namespace MyProductivityManager.Core.ViewModels
             if (result == true)
             {
                 if (param == null)
+                {   
+                    _projectsRepository.Delete(SelectedProject.Id);
                     Projects.Remove(SelectedProject);
+                }
                 else
+                {
+                    _projectsRepository.Delete(((Project)param).Id);
                     Projects.Remove((Project)param);
+                }
             }
         }
         private void AddTask()
         {
             OpenTaskDialogWindow();
         }
-        private void OpenProjectDialogWindow(Project project = null!)
+        private async void OpenProjectDialogWindow(Project project = null!)
         {
             var vm = _servicesProvider.GetRequiredService<ProjectDialogViewModel>();
             vm.InitializeProject(project);
@@ -95,12 +111,16 @@ namespace MyProductivityManager.Core.ViewModels
                 if (project == null)
                 {
                     project = new Project();
-                    Projects.Add(project);
+                    var dbresult = await _projectsRepository.Add(project);
+                    Projects.Add(dbresult);
                 }
                 else
                     project.DateUpdate = DateTime.Now;
                 project.Name = vm.ProjectName;
                 project.Description = vm.Description;
+
+                if(project.Id != 0)
+                    await _projectsRepository.Edit(project.Id, project);
             }
         }
         private void OpenTaskDialogWindow()
@@ -113,8 +133,10 @@ namespace MyProductivityManager.Core.ViewModels
                 {
                     Title = vm.TaskName,
                     Description = vm.Description,
+                    DueDate = vm.DueDate,
                     Status = vm.TaskStatus,
-                    Priority = vm.TaskPriority
+                    Priority = vm.TaskPriority,
+                    AssignedTo = string.IsNullOrEmpty(vm.AssignedTo) ? "Unassigned" : vm.AssignedTo
                 });
                 RefreshTasks();
             }

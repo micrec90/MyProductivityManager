@@ -3,11 +3,6 @@ using MyProductivityManager.Core.Context;
 using MyProductivityManager.Core.Interfaces;
 using MyProductivityManager.Core.Models.Finance;
 using MyProductivityManager.Core.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyProductivityManager.Core.Repositories
 {

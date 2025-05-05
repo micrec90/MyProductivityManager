@@ -10,7 +10,6 @@ namespace MyProductivityManager.Core.Models.ProjectTasks
 {
     public class Project : ObservableObject
     {
-        [Key]
         public int Id { get; set; }
         private string _name = string.Empty;
         public string Name

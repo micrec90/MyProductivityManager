@@ -44,6 +44,7 @@ namespace MyProductivityManager
                 options.UseSqlServer(connectionString);
             });
             services.AddScoped<IFinancialTransactionRepository, FinancialTransactionRepository>();
+            services.AddScoped<IProjectsRepository, ProjectsRepository>();
             services.AddScoped<IProjectsTasksRepository, ProjectsTasksRepository>();
 
             _servicesProvider = services.BuildServiceProvider();

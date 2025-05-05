@@ -12,6 +12,7 @@ namespace MyProductivityManager.Core.ViewModels
     public class TaskDialogViewModel : ViewModel
     {
         public ObservableCollection<ProjectTaskStatus> StatusValues { get; set; }
+        public ObservableCollection<TaskPriority> PriorityValues { get; set; }
 
         private string _windowTitle = "New task";
         public string WindowTitle
@@ -74,14 +75,37 @@ namespace MyProductivityManager.Core.ViewModels
                 OnPropertyChanged();
             }
         }
+        private DateTime _dueDate;
+        public DateTime DueDate
+        {
+            get { return _dueDate; }
+            set
+            {
+                _dueDate = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _assignedTo;
+        public string AssignedTo
+        {
+            get { return _assignedTo; }
+            set
+            {
+                _assignedTo = value;
+                OnPropertyChanged();
+            }
+        }
         public RelayCommand SaveProjectCommand { get; set; }
         public RelayCommand CancelProjectCommand { get; set; }
         public TaskDialogViewModel()
         {
             StatusValues = new ObservableCollection<ProjectTaskStatus>(Enum.GetValues(typeof(ProjectTaskStatus)).Cast<ProjectTaskStatus>());
+            PriorityValues = new ObservableCollection<TaskPriority>(Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>());
 
             SaveProjectCommand = new RelayCommand(obj => { SaveProject(obj); }, obj => true);
             CancelProjectCommand = new RelayCommand(obj => { CancelProject(obj); }, obj => true);
+
+            DueDate = DateTime.Now;
         }
         private void SaveProject(object param)
         {
