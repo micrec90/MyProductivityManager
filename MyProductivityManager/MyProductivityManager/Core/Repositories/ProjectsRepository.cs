@@ -59,7 +59,7 @@ namespace MyProductivityManager.Core.Repositories
 
         public async Task<List<Project>> GetAll()
         {
-            return await _context.Projects.ToListAsync();
+            return await _context.Projects.Include(t => t.Tasks).ToListAsync();
         }
 
         public async Task<List<Project>> GetAll(ProjectQueryObject projectQueryObject)

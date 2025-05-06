@@ -94,9 +94,34 @@
                         <DataTemplate>
                             <Border Margin="5" Padding="5" Background="#EEE" CornerRadius="5">
                                 <StackPanel>
+                                    <Button Content="X" Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Foreground" Value="Black"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                     <TextBlock Text="{Binding Title}" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                                     <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{Binding Priority}" FontWeight="Bold" Margin="0 10 0 0"/>
+                                    <TextBlock Text="{Binding Priority, StringFormat='Priority: {0}'}" FontWeight="Bold" Margin="0 10 0 0"/>
+                                    <TextBlock Text="{Binding AssignedTo, StringFormat='Assigned to: {0}'}" Margin="0 10 0 10"/>
                                     <Button Content="->"
                                             Command="{Binding DataContext.MoveRightCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}"/>
@@ -114,9 +139,34 @@
                         <DataTemplate>
                             <Border Margin="5" Padding="5" Background="#FDF6E3" CornerRadius="5">
                                 <StackPanel>
+                                    <Button Content="X" Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Foreground" Value="Black"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                     <TextBlock Text="{Binding Title}" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                                     <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{Binding Priority}" FontWeight="Bold" Margin="0 10 0 0"/>
+                                    <TextBlock Text="{Binding Priority, StringFormat='Priority: {0}'}" FontWeight="Bold" Margin="0 10 0 0"/>
+                                    <TextBlock Text="{Binding AssignedTo, StringFormat='Assigned to: {0}'}" Margin="0 10 0 10"/>
                                     <Button Content="&lt;-"
 Command="{Binding DataContext.MoveLeftCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
 CommandParameter="{Binding}"/>
@@ -137,9 +187,34 @@ CommandParameter="{Binding}"/>
                         <DataTemplate>
                             <Border Margin="5" Padding="5" Background="#E0F7E9" CornerRadius="5">
                                 <StackPanel>
+                                    <Button Content="X" Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Foreground" Value="Black"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                     <TextBlock Text="{Binding Title}" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                                     <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{Binding Priority}" FontWeight="Bold" Margin="0 10 0 0"/>
+                                    <TextBlock Text="{Binding Priority, StringFormat='Priority: {0}'}" FontWeight="Bold" Margin="0 10 0 0"/>
+                                    <TextBlock Text="{Binding AssignedTo, StringFormat='Assigned to: {0}'}" Margin="0 10 0 10"/>
                                     <Button Content="&lt;-"
 Command="{Binding DataContext.MoveLeftCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
 CommandParameter="{Binding}"/>

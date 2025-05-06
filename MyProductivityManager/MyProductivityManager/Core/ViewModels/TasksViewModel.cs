@@ -41,6 +41,7 @@ namespace MyProductivityManager.Core.ViewModels
         public RelayCommand EditProjectCommand { get; set; }
         public RelayCommand DeleteProjectCommand { get; set; }
         public RelayCommand AddTaskCommand { get; set; }
+        public RelayCommand DeleteTaskCommand { get; set; }
         public RelayCommand MoveLeftCommand { get; set; }
         public RelayCommand MoveRightCommand { get; set; }
 
@@ -58,6 +59,7 @@ namespace MyProductivityManager.Core.ViewModels
             EditProjectCommand = new RelayCommand(obj =>  EditProject(), obj => SelectedProject != null);
             DeleteProjectCommand = new RelayCommand(obj => DeleteProject(obj), obj => SelectedProject != null || obj != null);
             AddTaskCommand = new RelayCommand(obj => AddTask(), obj => SelectedProject != null);
+            DeleteTaskCommand = new RelayCommand(obj => DeleteTask(obj), obj => SelectedProject != null || obj != null);
             MoveLeftCommand = new RelayCommand(obj => MoveLeft(obj));
             MoveRightCommand = new RelayCommand(obj => MoveRight(obj));
 
@@ -67,8 +69,9 @@ namespace MyProductivityManager.Core.ViewModels
         }
         private  async void LoadInitialData()
         {
-            var data = await _projectsRepository.GetAll();
-            Projects = new ObservableCollection<Project>(data);
+            var projectData = await _projectsRepository.GetAll();
+            Projects = new ObservableCollection<Project>(projectData);
+            //var taskData = await _projectsTasksRepository.GetAll();
             OnPropertyChanged(nameof(Projects));
         }
         private void CreateNewProject()
@@ -101,6 +104,24 @@ namespace MyProductivityManager.Core.ViewModels
         {
             OpenTaskDialogWindow();
         }
+        private void DeleteTask(object param = null!)
+        {
+            var vm = _servicesProvider.GetRequiredService<YesNoDialogViewModel>();
+            var result = _dialogService.ShowDialog<YesNoDialogViewModel>(vm);
+            if (result == true)
+            {
+                var p = SelectedProject;
+                if (param == null)
+                {
+                }
+                else
+                {
+                    _projectsTasksRepository.Delete(((ProjectTask)param).Id);
+                    SelectedProject.Tasks.Remove((ProjectTask)param);
+                }
+                RefreshTasks();
+            }
+        }
         private async void OpenProjectDialogWindow(Project project = null!)
         {
             var vm = _servicesProvider.GetRequiredService<ProjectDialogViewModel>();
@@ -112,7 +133,8 @@ namespace MyProductivityManager.Core.ViewModels
                 {
                     project = new Project();
                     var dbresult = await _projectsRepository.Add(project);
-                    Projects.Add(dbresult);
+                    if(dbresult != null)
+                        Projects.Add(dbresult);
                 }
                 else
                     project.DateUpdate = DateTime.Now;
@@ -123,32 +145,39 @@ namespace MyProductivityManager.Core.ViewModels
                     await _projectsRepository.Edit(project.Id, project);
             }
         }
-        private void OpenTaskDialogWindow()
+        private async void OpenTaskDialogWindow()
         {
             var vm = _servicesProvider.GetRequiredService<TaskDialogViewModel>();
             var result = _dialogService.ShowDialog<TaskDialogViewModel>(vm);
             if (result == true)
             {
-                SelectedProject.Tasks.Add(new ProjectTask
+                ProjectTask task = new ProjectTask
                 {
                     Title = vm.TaskName,
                     Description = vm.Description,
                     DueDate = vm.DueDate,
                     Status = vm.TaskStatus,
                     Priority = vm.TaskPriority,
-                    AssignedTo = string.IsNullOrEmpty(vm.AssignedTo) ? "Unassigned" : vm.AssignedTo
-                });
+                    AssignedTo = string.IsNullOrEmpty(vm.AssignedTo) ? "Unassigned" : vm.AssignedTo,
+
+                    ProjectId = SelectedProject.Id
+                };
+                var dbresult = await _projectsTasksRepository.Add(task); // already adds into the collection
+                //if(dbresult != null)
+                //    SelectedProject.Tasks.Add(dbresult);
                 RefreshTasks();
             }
         }
         private void MoveLeft(object param)
         {
             ((ProjectTask) param).Status--;
+            _projectsTasksRepository.Edit(((ProjectTask)param).Id, (ProjectTask)param);
             RefreshTasks();
         }
         private void MoveRight(object param)
         {
             ((ProjectTask) param).Status++;
+            _projectsTasksRepository.Edit(((ProjectTask)param).Id, (ProjectTask)param);
             RefreshTasks();
         }
         private void RefreshTasks()

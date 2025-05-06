@@ -1,4 +1,6 @@
-﻿using MyProductivityManager.Core.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MyProductivityManager.Core.Context;
+using MyProductivityManager.Core.Interfaces;
 using MyProductivityManager.Core.Models.ProjectTasks;
 using MyProductivityManager.Core.Queries;
 using System;
@@ -11,24 +13,56 @@ namespace MyProductivityManager.Core.Repositories
 {
     public class ProjectsTasksRepository : IProjectsTasksRepository
     {
+        private readonly ApplicationDBContext _context;
+        public ProjectsTasksRepository(ApplicationDBContext context)
+        {
+            _context = context;
+        }
+
         public async Task<ProjectTask> Add(ProjectTask projectTask)
         {
-            throw new NotImplementedException();
+            await _context.ProjectTasks.AddAsync(projectTask);
+            await _context.SaveChangesAsync();
+            return projectTask;
         }
 
         public async Task<ProjectTask?> Delete(int id)
         {
-            throw new NotImplementedException();
+            var task = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (task == null)
+                return null;
+
+            _context.ProjectTasks.Remove(task);
+            await _context.SaveChangesAsync();
+
+            return task;
         }
 
         public async Task<ProjectTask?> Edit(int id, ProjectTask projectTask)
         {
-            throw new NotImplementedException();
+            var taskToEdit = await _context.ProjectTasks.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (taskToEdit == null)
+                return null;
+
+            taskToEdit.Title = projectTask.Title;
+            taskToEdit.Description = projectTask.Description;
+            taskToEdit.DueDate = projectTask.DueDate;
+            taskToEdit.Status = projectTask.Status;
+            taskToEdit.Priority = projectTask.Priority;
+            taskToEdit.AssignedTo = projectTask.AssignedTo;
+
+            _context.Entry(taskToEdit).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return taskToEdit;
         }
 
         public async Task<List<ProjectTask>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.ProjectTasks.ToListAsync();
         }
 
         public async Task<List<ProjectTask>> GetAll(ProjectTaskQueryObject projectTaskQueryObject)

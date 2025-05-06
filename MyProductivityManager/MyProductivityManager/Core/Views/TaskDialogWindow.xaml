@@ -22,7 +22,9 @@
             <ComboBox ItemsSource="{Binding StatusValues}"
                       SelectedItem="{Binding TaskStatus}" Margin="0 0 0 10"/>
             <ComboBox ItemsSource="{Binding PriorityValues}"
-          SelectedItem="{Binding TaskPriority}"/>
+          SelectedItem="{Binding TaskPriority}" Margin="0 0 0 10"/>
+            <TextBlock Text="Assigned to:"/>
+            <TextBox Width="150" Text="{Binding AssignedTo}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10 10 0 0">
             <Button Content="Save" Command="{Binding SaveProjectCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" Margin="0 0 10 0"/>
