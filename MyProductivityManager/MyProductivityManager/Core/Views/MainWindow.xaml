@@ -23,7 +23,7 @@
             <Button Content="Habit Tracker" Command="{Binding Path=NavigationToHabitTrackerCommand}"/>
             <Button Content="Watermark Editor" Command="{Binding Path=NavigationToWatermarkEditorCommand}"/>
         </StackPanel>
-        <ContentControl Grid.Column="1" Content="{Binding NavigationService.CurrentViewModel}">
+        <ContentControl Grid.Column="1" Content="{Binding NavigationService.CurrentViewModel}" HorizontalAlignment="Left" VerticalAlignment="Top">
             
         </ContentControl>
         <!--<TextBlock Text="Main" HorizontalAlignment="Center"/>-->

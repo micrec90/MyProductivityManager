@@ -13,6 +13,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -26,33 +27,80 @@
                     <RadioButton Content="Image Watermark" IsChecked="{Binding UseImageWatermark, Mode=TwoWay}"/>
                 </StackPanel>
             </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Position:" FontWeight="Bold"/>
+                <ComboBox ItemsSource="{Binding WatermarkPositionValues}"
+                          SelectedItem="{Binding WatermarkPosition}"/>
+                <TextBlock Text="{Binding Opacity, StringFormat='Opacity: {0}'}" FontWeight="Bold"/>
+                <Slider Minimum="0" Maximum="1" Value="{Binding Opacity}" TickFrequency="0.1" IsSnapToTickEnabled="True" />
+            </StackPanel>
             <StackPanel Visibility="{Binding UseTextWatermark, Converter={StaticResource BoolToVis}}">
                 <TextBlock Text="Watermark Text:" FontWeight="Bold"/>
                 <TextBox Text="{Binding WatermarkText}"/>
                 <TextBlock Text="{Binding FontSize, StringFormat='Font Size: {0}'}" FontWeight="Bold"/>
                 <Slider Minimum="10" Maximum="72" Value="{Binding FontSize}" TickFrequency="2" IsSnapToTickEnabled="True"/>
-                <TextBlock Text="Position:" FontWeight="Bold"/>
-                
             </StackPanel>
             <StackPanel Visibility="{Binding UseImageWatermark, Converter={StaticResource BoolToVis}}">
                 <TextBlock Text="Watermark Image:" FontWeight="Bold"/>
                 <Button Content="Load Watermark Image" Command="{Binding LoadWatermarkImageCommand}" />
                 <Image Source="{Binding WatermarkImage}" Width="100" Height="100" />
             </StackPanel>
-            <StackPanel>
-                <ComboBox ItemsSource="{Binding WatermarkPositionValues}"
-                          SelectedItem="{Binding WatermarkPosition}"/>
-                <TextBlock Text="{Binding Opacity, StringFormat='Opacity: {0}'}" FontWeight="Bold"/>
-                <Slider Minimum="0" Maximum="1" Value="{Binding Opacity}" TickFrequency="0.1" IsSnapToTickEnabled="True" />
-            </StackPanel>
         </StackPanel>
         <Border Grid.Column="1" Margin="10" BorderBrush="Gray" BorderThickness="1">
-            <Image Source="{Binding PreviewImage}" Stretch="Uniform" />
+            <Image Source="{Binding PreviewImage.Source}" Stretch="Uniform" />
         </Border>
+        <StackPanel Grid.Column="2" Margin="10">
+            <ListBox ItemsSource="{Binding ImportedImages}"
+                     SelectedItem="{Binding PreviewImage}"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     HorizontalContentAlignment="Stretch"
+                     MaxHeight="370"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding FileName}" Grid.Column="0" VerticalAlignment="Center"/>
+                            <Button Content="X" Command="{Binding DataContext.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="Foreground" Value="Black"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Content="Clear all" Command="{Binding ClearAllCommand}"/>
+        </StackPanel>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 10">
-            <Button Content="Load Image" Margin="10 0 10 0" Command="{Binding LoadImageCommand}" />
-            <Button Content="Apply Watermark" Margin="10 0 10 0" Command="{Binding ApplyWatermarkCommand}" />
-            <Button Content="Export Image" Margin="10 0 10 0" Command="{Binding ExportImageCommand}" />
+            <Button Content="Import Images" Margin="10 0 10 0" Command="{Binding LoadImageCommand}" />
+            <Button Content="Apply Watermark to image" Margin="10 0 10 0" Command="{Binding ApplyWatermarkCommand}" />
+            <Button Content="Apply Watermark to all" Margin="10 0 10 0" Command="{Binding ApplyWatermarkCommand}" CommandParameter="True" />
+            <Button Content="Export selected image" Margin="10 0 10 0" Command="{Binding ExportImageCommand}" />
+            <Button Content="Export All" Margin="10 0 10 0" Command="{Binding ExportImageCommand}" CommandParameter="True" />
         </StackPanel>
     </Grid>
 </UserControl>
