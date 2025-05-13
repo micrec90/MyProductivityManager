@@ -6,7 +6,53 @@
         xmlns:local="clr-namespace:MyProductivityManager.Core.Views"
         mc:Ignorable="d"
         Height="450" Width="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="10">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="Text Watermark" IsChecked="{Binding UseTextWatermark, Mode=OneWay}"/>
+                    <RadioButton Content="Image Watermark" IsChecked="{Binding UseImageWatermark, Mode=TwoWay}"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Visibility="{Binding UseTextWatermark, Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="Watermark Text:" FontWeight="Bold"/>
+                <TextBox Text="{Binding WatermarkText}"/>
+                <TextBlock Text="{Binding FontSize, StringFormat='Font Size: {0}'}" FontWeight="Bold"/>
+                <Slider Minimum="10" Maximum="72" Value="{Binding FontSize}" TickFrequency="2" IsSnapToTickEnabled="True"/>
+                <TextBlock Text="Position:" FontWeight="Bold"/>
+                
+            </StackPanel>
+            <StackPanel Visibility="{Binding UseImageWatermark, Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="Watermark Image:" FontWeight="Bold"/>
+                <Button Content="Load Watermark Image" Command="{Binding LoadWatermarkImageCommand}" />
+                <Image Source="{Binding WatermarkImage}" Width="100" Height="100" />
+            </StackPanel>
+            <StackPanel>
+                <ComboBox ItemsSource="{Binding WatermarkPositionValues}"
+                          SelectedItem="{Binding WatermarkPosition}"/>
+                <TextBlock Text="{Binding Opacity, StringFormat='Opacity: {0}'}" FontWeight="Bold"/>
+                <Slider Minimum="0" Maximum="1" Value="{Binding Opacity}" TickFrequency="0.1" IsSnapToTickEnabled="True" />
+            </StackPanel>
+        </StackPanel>
+        <Border Grid.Column="1" Margin="10" BorderBrush="Gray" BorderThickness="1">
+            <Image Source="{Binding PreviewImage}" Stretch="Uniform" />
+        </Border>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 10">
+            <Button Content="Load Image" Margin="10 0 10 0" Command="{Binding LoadImageCommand}" />
+            <Button Content="Apply Watermark" Margin="10 0 10 0" Command="{Binding ApplyWatermarkCommand}" />
+            <Button Content="Export Image" Margin="10 0 10 0" Command="{Binding ExportImageCommand}" />
+        </StackPanel>
     </Grid>
 </UserControl>
