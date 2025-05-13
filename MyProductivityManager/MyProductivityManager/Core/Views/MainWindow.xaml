@@ -15,6 +15,13 @@
             <Button Content="Home" Command="{Binding Path=NavigationToHomeCommand}"/>
             <Button Content="Finance" Command="{Binding Path=NavigationToFinanceCommand}"/>
             <Button Content="Tasks" Command="{Binding Path=NavigationToTasksCommand}"/>
+            <Button Content="Markdown Editor" Command="{Binding Path=NavigationToMarkdownEditorCommand}"/>
+            <Button Content="Recipe Organizer &amp; Meal Planner" Command="{Binding Path=NavigationToRecipeOrganizerMealPlannerCommand}"/>
+            <Button Content="Time Tracker" Command="{Binding Path=NavigationToTimeTrackerCommand}"/>
+            <Button Content="Music Player &amp; Playlist Manager" Command="{Binding Path=NavigationToMusicPlayerPlaylistManagerCommand}"/>
+            <Button Content="Weather Dashboard" Command="{Binding Path=NavigationToWeatherDashboardCommand}"/>
+            <Button Content="Habit Tracker" Command="{Binding Path=NavigationToHabitTrackerCommand}"/>
+            <Button Content="Watermark Editor" Command="{Binding Path=NavigationToWatermarkEditorCommand}"/>
         </StackPanel>
         <ContentControl Grid.Column="1" Content="{Binding NavigationService.CurrentViewModel}">
             

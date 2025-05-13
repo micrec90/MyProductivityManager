@@ -28,6 +28,13 @@ namespace MyProductivityManager
             services.AddSingleton<HomeViewModel>();
             services.AddSingleton<FinanceViewModel>();
             services.AddSingleton<TasksViewModel>();
+            services.AddSingleton<MarkdownEditorViewModel>();
+            services.AddSingleton<RecipeOrganizerMealPlannerViewModel>();
+            services.AddSingleton<TimeTrackerViewModel>();
+            services.AddSingleton<MusicPlayerPlaylistManagerViewModel>();
+            services.AddSingleton<WeatherDashboardViewModel>();
+            services.AddSingleton<HabitTrackerViewModel>();
+            services.AddSingleton<WatermarkEditorViewModel>();
 
             services.AddTransient<ProjectDialogViewModel>();
             services.AddTransient<TaskDialogViewModel>();
