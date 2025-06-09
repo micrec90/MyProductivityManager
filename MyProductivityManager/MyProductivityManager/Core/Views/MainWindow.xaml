@@ -22,6 +22,15 @@
             <Button Content="Weather Dashboard" Command="{Binding Path=NavigationToWeatherDashboardCommand}"/>
             <Button Content="Habit Tracker" Command="{Binding Path=NavigationToHabitTrackerCommand}"/>
             <Button Content="Watermark Editor" Command="{Binding Path=NavigationToWatermarkEditorCommand}"/>
+
+            <Button Content="Flashcard Study App" Command="{Binding Path=FlashcardStudyCommand}"/>
+            <Button Content="Data Visualization Dashboard" Command="{Binding Path=DataVisualizationDashboardCommand}"/>
+            <Button Content="Inventory Management System" Command="{Binding Path=InventoryManagementSystemCommand}"/>
+            <Button Content="Image Editor / Meme Generator" Command="{Binding Path=ImageEditorMemeGeneratorCommand}"/>
+            <Button Content="Chat Client" Command="{Binding Path=ChatClientCommand}"/>
+            <Button Content="Productivity App" Command="{Binding Path=ProductivityCommand}"/>
+            <Button Content="Code Snippet Manager" Command="{Binding Path=CodeSnippetManagerCommand}"/>
+            <Button Content="Portfolio Manager" Command="{Binding Path=PortfolioManagerCommand}"/>
         </StackPanel>
         <ContentControl Grid.Column="1" Content="{Binding NavigationService.CurrentViewModel}" HorizontalAlignment="Left" VerticalAlignment="Top">
             

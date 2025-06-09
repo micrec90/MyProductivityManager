@@ -47,5 +47,30 @@
         <DataTemplate DataType="{x:Type TypeName=viewModel:YesNoDialogViewModel}">
             <view:YesNoDialogWindow/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type TypeName=viewModel:FlashcardStudyViewModel}">
+            <view:FlashcardStudyWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:DataVisualizationDashboardViewModel}">
+            <view:DataVisualizationDashboardWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:InventoryManagementSystemViewModel}">
+            <view:InventoryManagementSystemWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:ImageEditorMemeGeneratorViewModel}">
+            <view:ImageEditorMemeGeneratorWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:ChatClientViewModel}">
+            <view:ChatClientWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:ProductivityViewModel}">
+            <view:ProductivityWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:CodeSnippetManagerViewModel}">
+            <view:CodeSnippetManagerWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:PortfolioManagerViewModel}">
+            <view:PortfolioManagerWindow/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

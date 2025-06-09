@@ -36,6 +36,16 @@ namespace MyProductivityManager
             services.AddSingleton<HabitTrackerViewModel>();
             services.AddSingleton<WatermarkEditorViewModel>();
 
+            services.AddSingleton<FlashcardStudyViewModel>();
+            services.AddSingleton<DataVisualizationDashboardViewModel>();
+            services.AddSingleton<InventoryManagementSystemViewModel>();
+            services.AddSingleton<ImageEditorMemeGeneratorViewModel>();
+            services.AddSingleton<ChatClientViewModel>();
+            services.AddSingleton<ProductivityViewModel>();
+            services.AddSingleton<CodeSnippetManagerViewModel>();
+            services.AddSingleton<PortfolioManagerViewModel>();
+
+
             services.AddTransient<ProjectDialogViewModel>();
             services.AddTransient<TaskDialogViewModel>();
 
